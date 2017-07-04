@@ -4,16 +4,16 @@ This is the initial README file for the massPix repository.
 
 massPix processes high resolution mass spectrometry imaging data, performs multivariate statistics (PCA, clustering) and lipid identification.
 
-massPix is an R package which can be called by a single function (massPix) using "processing_script.R". Currently massPix processes one file at a time. massPix supports .imzML files - if your files are not currently in this format see instructions on on converting raw data files to imzML format ("raw_to_imzML_quickstart.pptx").
+massPix is an R package which can be called by a single function using "processing_script.R". Currently massPix processes one file at a time. massPix supports .imzML files - if your files are not currently in this format see instructions on on converting raw data files to imzML format ("raw_to_imzML_quickstart.pptx").
 
 Detailed step-by-step instructions on get started with using massPix are available in the "massPix_quickstart.pptx" file.
 
-An R script has also been provided which shows the composite functions of massPix being used one by one ("massPix_step_by_step.R"). This may be useful for troubleshooting and/or adapting the source code. See "massPix Step-byStep" section below).
+An R script has also been provided which shows the composite functions of massPix being used one by one ("massPix_step_by_step.R"). This may be useful for troubleshooting and/or adapting the source code. See "massPix Step-byStep" section below.
 
 
 Brief introduction
 -------------------
-massPix is run from the R scripting interface (function: massPix), however a detailed knowledge of R is not required to install and use the software. Those with advanced knowledge of R programming can adapt the source code for their own needs. massPix outputs high quality images, a dataframe of the final normalised and annotated image which can be further manipulated in R, and csv files for spectra corresponding to cluster centers, PCA loadings, and lipid annotations. The massPix R package ("massPix_1.2.tar.gz"), all R scripts (wrapper, and individual functions), library files (for creating the lipid database) and the imzML Converter are available here. A more detailed step-by-step presentation on software use ("massPix_quickstart.ppt") and instructions on file conversion ("raw_to_imzML_quickstart.ppt") are also available here. Test data will shortly be available on the MetaboLights repository (accession number TBC). 
+massPix is run from the R scripting interface (function: massPix), however a detailed knowledge of R is not required to install and use the software. Those with advanced knowledge of R programming can adapt the source code. massPix outputs high quality images, a dataframe of the final normalised and annotated image which can be further manipulated in R, and csv files for spectra corresponding to cluster centers, PCA loadings, and lipid annotations. The massPix R package ("massPix_1.2.tar.gz"), all R scripts (wrapper, and individual functions), library files (for creating the lipid database for annotations) and the imzML Converter are available here. A more detailed step-by-step presentation on software use ("massPix_quickstart.pptx") and instructions on file conversion ("raw_to_imzML_quickstart.pptx") are also available here. Test data will shortly be available on the MetaboLights repository (accession number TBC), but currently can be downloaded from GitHub (imzML file) and dropbox following the given link (ibd file). 
 
 The overall data processing workflow consists of initial data pre-processing, filtering, image subsetting, deisotoping, annotation, normalisation, scaling, image “slicing” and multivariate statistics. Data in imzML format is parsed to R. Ions with intensities greater than a threshold, from each spectra, are extracted and grouped to user-adjustable mass bins (function: mzextractor). Spectral features are defined by the median m/z value in each bin, and only features detected above a threshold proportion of spectra are retained (function: peakpicker.bin). Average intensities for all features from a random subset of pixels are computed and used to perform deisotoping (function: subsetImage). The deisotoping algorithm identifies the molecular ion (M) and removes isotopes at m/z (M+1) and (M+2) which are within a calculated proportion of the intensity of M (function: filtered and deisotope). 
 
@@ -125,15 +125,15 @@ results <- massPix(# what type of data analysis do you want?
  ```
  
  
-Process - T to process data from imzML file. F to skip processing. To process data for the first time choose process=T. You can use process=F, when wishing to re-process data with different settings for PCA, clustering and/or ion slicing. The final output is image.norm.csv (full normalised image data matrix - lipid annotations, m/z and intensities) and image.norm_short.csv (containing lipid annotations and m/z only).
+Process - T to process data from imzML file. F to skip processing. To process data for the first time choose process=T. You can use process=F, when re-processing data with different settings for PCA, clustering and/or ion slicing. The final output is image.norm.csv (full normalised image data matrix - lipid annotations, m/z and intensities) and image.norm_short.csv (containing lipid annotations and m/z only).
 
 pca - T to conduct PCA image analysis. If you want to perform PCA analysis choose pca=T; output are R plots of PC scores and loadings which can be view or exported as pdf. In addition the PC loadings are stored as loadingsPC.csv files.
 
-slice - T to generate two dimensional image of one ion. The ion to be "sliced" is defined in parameter "row" (see below). Output is R plot which may be viewed/exported as pdf.
+slice - T to generate two dimensional image of single ion. The ion to be "sliced" is defined in parameter "row" (see below). Output is R plot which may be viewed/exported as pdf.
 
 cluster.k - T to perform clustering. Output are R plots of clustered pixels and spectra corresponding to the average of each cluster. In addition spectra are written to Cluster.csv files.
 
-ionisation_mode - Choose "positive" or "negative"; this will determine which lipid classes are used when building database
+ionisation_mode - Choose "positive" or "negative"; this will determine which lipid classes are used when building database for lipid annotations
 
 thres.int - defines intensity threshold, above which ions are retained
 
@@ -167,7 +167,7 @@ prop.2 - Proportion of monoisotope intensity the 2nd isotope intensity must not 
 
 search.mod - Search modifications T/F.
 
-mod - modifications to search eg. c(NL=T, label=F, oxidised=T,desat=T). This step searches for modifications (defined in library file "lib_modifiction.csv") including neutral loss (loss of water, choline, phosphocholine, etc), label (13C palmitate) (oxidation and desaturations.
+mod - modifications to search eg. c(NL=T, label=F, oxidised=T,desat=T). This step searches for modifications (defined in library file "lib_modifiction.csv") including neutral loss (loss of water, choline, phosphocholine, etc), label (13C palmitate), oxidation and desaturations.
 
 lookup_mod - A dataframe defining modifications - this is read from the library file "lib_modification.csv" and need not be defined by user
 
@@ -175,9 +175,9 @@ adducts - vector of adducts to be searched in the library of lipid masses. Pre-d
 
 sel.class -  A vector defining classes of lipids to be included in the library. Pre-defined in makelibrary function. If ionisation mode is positive, lipid classes searched are: TG, DG, PC, PE, PS, LysoPC, DG-H20, CE, SM, Cer. If ionisation mode is negative, lipid classes searched are:  PC, PA, PS, PE, PG, PI, PIP, PIP2, PIP3, FFA 
 
-fixed - Defines if one of the SN positions is fixed, default is F.
+fixed - Defines if one of the SN positions for fatty acid chain is fixed, default is F.
 
-fixed_FA - Defines the name of the fixed FA if fixed is T, e.g. 16, 16.1, 18.2.
+fixed_FA - Defines the name of the fixed fatty acid if fixed is T, e.g. 16, 16.1, 18.2.
 
 lookup_lipid_class - A dataframe defining lipid classes - this is read from the library file "lib_class.csv" and need not be defined by user
 
@@ -185,13 +185,13 @@ lookup_FA - A dataframe defining fatty acids - this is read from the library fil
 
 lookup_element - A dataframe defining elements - this is read from the library file "lib_element.csv" and need not be defined by the user
 
-files - a vector of file names; currently only supports processing one file at a time. Does not need to be defined by user.
+files - a vector of file names; currently only supports processing one file at a time. 
 
 spectra_dir - file path to the spectral files
 
 imzMLparse - file path to imzMLConverter
 
-percentage.deiso - Defines the proportion of total pixels to select, at random from the first file to produce a subset of the image. This step speeds up the image processing, by performing deisotoping on a subset of the image and then applying it to the whole image.   
+percentage.deiso - Defines the proportion of total pixels to select, at random, to produce a subset of the image. This step speeds up the image processing, by performing deisotoping on a subset of the image and then applying it to all pixels.   
 
 steps - Sequence of values between 0 and 1 that define the thresholds of missing values to test
 
@@ -199,9 +199,9 @@ imagedata.in - Dataframe containing image - does not need to be defined by user.
 
 norm.type - "TIC" or "median" or "standards" or "none" are the options. These are different ways to normalise the data, suggest to use "TIC". "standards" may be used when using an internal standard(s)
 
-standards - default is NULL, vector of row indices corresponding to variables that are standards. When wishing to normalise to an internal standard(s), choose norm.type = "standards". The row number for the m/z of the standard(s) must be provided, e.g. standards = c(45, 60). Row indices can be found by looking at the image_norm_short.csv output file. 
+standards - default is NULL. Vector of row indices corresponding to variables that are standards. When wishing to normalise to an internal standard(s), choose norm.type = "standards". The row number for the m/z of the standard(s) must be provided, e.g. standards = c(45, 60). Row indices can be found by looking at the image_norm_short.csv output file. 
 
-scale.type - options are "cs" center and pareto scale, "c" center only, "pareto" pareto only and "none"}
+scale.type - options are "cs" center and pareto scale, "c" center only, "pareto" pareto only and "none"
 
 transform - T/F to perform log transform
 
