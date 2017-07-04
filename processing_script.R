@@ -16,7 +16,7 @@ spectra_dir <-  paste(home_dir,"data",sep="") # spectra files
 imzMLparse <- paste(home_dir,"imzMLConverter/imzMLConverter.jar",sep="") # imzML converter
 
 
-# running the main function and setting options
+# running the main function and setting the options
 
 results <- massPix(# what type of data analysis do you want?
                       process=T, 
