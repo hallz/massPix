@@ -4,7 +4,7 @@ This is the initial README file for the massPix repository.
 
 massPix processes high resolution mass spectrometry imaging data, performs multivariate statistics (PCA, clustering) and lipid identification.
 
-massPix is an R package which can be called by a single function (massPix) using "processing_script.R". Currently massPix processes one file at a time. massPix supports .imzML files - if your files are currently in this format proceed to read the "processing" section. For instructions on on converting raw data files to imzML format, the "raw_to_imzML_quickstart.pptx" file has further instructions.
+massPix is an R package which can be called by a single function (massPix) using "processing_script.R". Currently massPix processes one file at a time. massPix supports .imzML files - if your files are not currently in this format see instructions on on converting raw data files to imzML format ("raw_to_imzML_quickstart.pptx").
 
 Detailed step-by-step instructions on get started with using massPix are available in the "massPix_quickstart.pptx" file.
 
