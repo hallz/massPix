@@ -141,11 +141,11 @@ thres.low - defines the minimum m/z threshold, above which ions will be retained
 
 thres.high - Defines the maximum m/z threshold, below which ions will be retained
 
-bin.ppm - Mass accuracy for binning between spectra 
+bin.ppm - Mass accuracy for binning between spectra. Suggest starting with 10 ppm bin width for acquired at mass resolving power 60,000 at m/z 400; increase/decrease with lower/higher resolving power, respectively. 
 
 thres.filter - Defines threshold for proportion of missing values - in steps ranging from 1 to 21 where 0 is no ions retained (ion must be present in every pixel)and 21 is all ions retained (ion must be present in at least one pixel); suggest using values between 11 and 15.
 
-ppm.annotate - Defines ppm threshold for which |observed m/z - theoretical m/z| must be less than for annotation to be retained. 
+ppm.annotate - Defines ppm threshold for which |observed m/z - theoretical m/z| must be less than for annotation to be retained. Suggest to use same mass tolerance (ppm.annotate) as bin width (bin.ppm)
 
 res.spatial - spatial resolution of image; units are micrometers
 
