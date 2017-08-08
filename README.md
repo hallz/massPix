@@ -135,13 +135,13 @@ cluster.k - T to perform clustering. Output are R plots of clustered pixels and 
 
 ionisation_mode - Choose "positive" or "negative"; this will determine which lipid classes are used when building database for lipid annotations
 
-thres.int - defines intensity threshold, above which ions are retained
+thres.int - defines intensity threshold, above which ions are retained. Used when parsing spectral data from imzML to massPix.
 
-thres.low - defines the minimum m/z threshold, above which ions will be retained
+thres.low - defines the minimum m/z threshold, above which ions will be retained. Used when parsing spectral data from imzML to massPix.
 
-thres.high - Defines the maximum m/z threshold, below which ions will be retained
+thres.high - Defines the maximum m/z threshold, below which ions will be retained. Used when parsing spectral data from imzML to massPix.
 
-bin.ppm - Mass accuracy for binning between spectra. Suggest starting with 10 ppm bin width for data acquired with mass resolving power 60,000 at m/z 400; increase/decrease with lower/higher resolving power, respectively. 
+bin.ppm - Mass accuracy for binning between spectra. Suggest starting with 10 ppm bin width for data acquired with mass resolving power 60,000 at m/z 400; increase/decrease with lower/higher resolving power, respectively. Used to group common ions across all spectra (pixels) where ions are measured with slightly different m/z.
 
 thres.filter - Defines threshold for proportion of missing values - in steps ranging from 1 to 21 where 0 is no ions retained (ion must be present in every pixel)and 21 is all ions retained (ion must be present in at least one pixel); suggest using values between 11 and 15.
 
@@ -157,17 +157,17 @@ cluster.type - Currently only supports "kmeans" clustering
 
 clusters - defines the number of clusters to use for clustering
 
-ppm - Tolerance (ppm) within which mass of isotope must be within. 
+ppm - Defines tolerance (ppm) for the assignment of 13C isotopes. 
 
-no_isotopes - Number of isotopes to consider (1 or 2)
+no_isotopes - Number of 13C isotopes to consider (1 or 2)
 
-prop.1 - Proportion of monoisotope intensity the 1st isotope intensity must not exceed
+prop.1 - Proportion of monoisotope intensity the 1st isotope intensity must not exceed to assign as a 13C isotope
 
-prop.2 - Proportion of monoisotope intensity the 2nd isotope intensity must not exceed
+prop.2 - Proportion of monoisotope intensity the 2nd isotope intensity must not exceed to assign as a 13C isotope
 
-search.mod - Search modifications T/F.
+search.mod - Search modifications T/F. If T, then modifications selected in parameter(mod) are matched during spectra feature assignment.
 
-mod - modifications to search eg. c(NL=T, label=F, oxidised=T,desat=T). This step searches for modifications (defined in library file "lib_modifiction.csv") including neutral loss (loss of water, choline, phosphocholine, etc), label (13C palmitate), oxidation and desaturations.
+mod - modifications type to search eg. c(NL=T, label=F, oxidised=T,desat=T). Selected modification types will be searched during spectral feature annotation. Modification types are defined in library file "lib_modifiction.csv" including neutral loss (loss of water, choline, phosphocholine, etc), label (13C palmitate), oxidation and desaturations
 
 lookup_mod - A dataframe defining modifications - this is read from the library file "lib_modification.csv" and need not be defined by user
 
@@ -175,9 +175,9 @@ adducts - vector of adducts to be searched in the library of lipid masses. Pre-d
 
 sel.class -  A vector defining classes of lipids to be included in the library. Pre-defined in makelibrary function. If ionisation mode is positive, lipid classes searched are: TG, DG, PC, PE, PS, LysoPC, DG-H20, CE, SM, Cer. If ionisation mode is negative, lipid classes searched are:  PC, PA, PS, PE, PG, PI, PIP, PIP2, PIP3, FFA 
 
-fixed - Defines if one of the SN positions for fatty acid chain is fixed, default is F.
+fixed - Defines if one of the SN positions for fatty acid chain is fixed, default is F. Used to generate a search library biased towards a particular fatty acid. Fixed fatty acid is defined by fixed_FA
 
-fixed_FA - Defines the name of the fixed fatty acid if fixed is T, e.g. 16, 16.1, 18.2.
+fixed_FA - Defines the name of the fixed fatty acid if fixed is T, e.g. 16, 16.1, 18.2. Defines a specfic fatty acid used to generate a search library biased towards a particular fatty acid. Requires parameter (fixed=T).
 
 lookup_lipid_class - A dataframe defining lipid classes - this is read from the library file "lib_class.csv" and need not be defined by user
 
@@ -191,11 +191,11 @@ spectra_dir - file path to the spectral files
 
 imzMLparse - file path to imzMLConverter
 
-percentage.deiso - Defines the proportion of total pixels to select, at random, to produce a subset of the image. This step speeds up the image processing, by performing deisotoping on a subset of the image and then applying it to all pixels.   
+percentage.deiso - Defines the proportion of total pixels to select, at random, to produce a subset of the image. This step speeds up the image processing, by performing pre-processing (deisotoping, spectral feature selection, and filtering to remove missing values) on a subset of the image and then applying it to all pixels.   
 
-steps - Sequence of values between 0 and 1 that define the thresholds of missing values to test
+steps - Sequence of values between 0 and 1, incrementing in 0.05 that define the proportion of missing values to test
 
-imagedata.in - Dataframe containing image - does not need to be defined by user.
+imagedata.in - Dataframe containing image generated by massPix - does not need to be defined by user.
 
 norm.type - "TIC" or "median" or "standards" or "none" are the options. These are different ways to normalise the data, suggest to use "TIC". "standards" may be used when using an internal standard(s)
 
