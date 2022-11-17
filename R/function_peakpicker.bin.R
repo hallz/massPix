@@ -14,7 +14,7 @@ peakpicker.bin<-function(extracted, bin.ppm = 12){
   while(i <= nrow(spectra)){
       ## group ions into common bin
       result <- spectra[ spectra[,1] >= spectra[i,1] & spectra[,1] <= (spectra[i,1]+(bin.ppm * spectra[i,1]) / 1000000),]
-      if(class(result)=="matrix" & spectra[i,"bin.med"] == 0){
+      if(class(result)[1]=="matrix" & spectra[i,"bin.med"] == 0){
         spectra[i:(i+nrow(result)-1),2]<-round(median(result[,1]),digits=4)
         i<-i+nrow(result)
       } 
